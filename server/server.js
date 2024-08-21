@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const cors = require('cors');
 // require in home router
-const home = require('../server/routes/homeRouter');
+const item = require('../server/routes/itemRouter');
 
 //link database
 const mongoURI = process.env.MONGO_URI;
