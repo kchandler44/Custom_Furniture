@@ -1,15 +1,13 @@
 import React from 'react';
 import '../assets/styles.scss';
-import TaskList from './TaskList.jsx';
+import List from './galleryList.jsx';
 
 const App = () => {
   return (
     <div>
-      <h1 id='title'>
-        Aamold Custom Furniture
-      </h1>
+      <h1 id='title'>Aamold Custom Designs</h1>
       <div>
-        <TaskList />
+        <galleryList />
       </div>
     </div>
   );

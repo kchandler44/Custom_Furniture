@@ -4,18 +4,17 @@ const path = require('path');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const cors = require('cors');
+// require in home router
+const item = require('../server/routes/itemRouter');
 
-//require in task router
-const task = require('./routes/taskRouter');
-
+//link database
 const mongoURI = process.env.MONGO_URI;
-
 const connectDB = async () => {
   try {
     const connect = await mongoose.connect(mongoURI);
     console.log('Database connected...');
   } catch (err) {
-    return `Error: ${err}`;
+    return next(`Error: ${err}`);
   }
 };
 connectDB();
@@ -28,7 +27,7 @@ app.use(
   })
 );
 
-app.use('/task', task);
+app.use('/home', item);
 //statically serve index.html
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../index.html'));
