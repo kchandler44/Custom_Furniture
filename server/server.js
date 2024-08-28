@@ -6,7 +6,10 @@ require('dotenv').config();
 const cors = require('cors');
 // require in home router
 const item = require('../server/routes/itemRouter');
+// require in home router
+const item = require('../server/routes/itemRouter');
 
+//link database
 //link database
 const mongoURI = process.env.MONGO_URI;
 const connectDB = async () => {
@@ -14,6 +17,7 @@ const connectDB = async () => {
     const connect = await mongoose.connect(mongoURI);
     console.log('Database connected...');
   } catch (err) {
+    return next(`Error: ${err}`);
     return next(`Error: ${err}`);
   }
 };
