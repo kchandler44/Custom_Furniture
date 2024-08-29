@@ -1,14 +1,6 @@
-body {
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
-    'Lucida Sans', Arial, sans-serif;
-  color: rgb(42, 39, 39);
-  background-color: thistle;
-  display:flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-#title {
-  font-size: xx-large;
-}
+$baseBrown: #240f06;
+$mediumBrown: #70351f;
+$accentGreen: #48513c;
+$lightBrown: #b97751;
+$neutral: #f7e7dc;
+$myFont: Helvetica, sans-serif;

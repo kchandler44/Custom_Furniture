@@ -1,5 +1,19 @@
-const express = require('express');
-const item = express.Router();
-const itemController = require('../controllers/itemController');
+import express from 'express';
+import {
+  addItem,
+  getItems,
+  updateItem,
+  deleteItem,
+} from '../controllers/itemController.js';
 
-module.exports = item;
+const item = express.Router();
+
+item.post('/addItem', addItem);
+
+item.get('/getItems', getItems);
+
+item.patch('/updateItem/:id', updateItem);
+
+item.delete('/deleteItem/:id', deleteItem);
+
+export default item;
