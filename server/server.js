@@ -6,11 +6,12 @@ import dotenv from 'dotenv';
 
 import cors from 'cors';
 import mongoose from 'mongoose';
-import { DbConnectionError } from './errors/db-connection-error.js';
+import { DbConnectionError } from './customErrors/db-connection-error.js';
+import { NotFoundError } from './customErrors/not-found-error.js';
+import { CustomError } from './customErrors/custom-error.js';
 import itemRouter from './routes/itemRouter.js';
-import { NotFoundError } from './errors/not-found-error.js';
-import { CustomError } from './errors/custom-error.js';
 
+//used for ES6
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname + '../../.env') });
@@ -27,7 +28,6 @@ const connectDB = async () => {
   }
 };
 
-//link database
 connectDB();
 
 app.use(express.json());
@@ -39,11 +39,14 @@ app.use(
   })
 );
 
+//only authorized users (Chris) will be able to access these pages
 app.use('/api/item', itemRouter);
+
 // serve index.html
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../index.html'));
 });
+
 
 app.use('*', (req, res) => {
   throw new NotFoundError();
