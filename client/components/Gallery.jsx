@@ -15,7 +15,7 @@ const Gallery = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetch('http://localhost:3000/item/getItems');
+      const data = await fetch('http://localhost:3000/api/item/getItems');
       const jsonData = await data.json();
       console.log(jsonData);
       setItem(jsonData);
@@ -38,7 +38,7 @@ const Gallery = () => {
         item_cost: itemCost,
         item_status: itemStatus,
       };
-      const response = await fetch('http://localhost:3000/item/addItem', {
+      const response = await fetch('http://localhost:3000/api/item/addItem', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ const Gallery = () => {
     try {
       console.log('itemId: ', itemId);
       const response = await fetch(
-        `http://localhost:3000/item/deleteItem/${itemId}`,
+        `http://localhost:3000/api/item/deleteItem/${itemId}`,
         {
           method: 'DELETE',
         }
@@ -97,7 +97,7 @@ const Gallery = () => {
       };
       try {
         const response = await fetch(
-          `http://localhost:3000/item/update/${itemId}`,
+          `http://localhost:3000/api/item/update/${itemId}`,
           {
             method: 'PATCH',
             headers: {

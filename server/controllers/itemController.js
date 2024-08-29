@@ -1,69 +1,62 @@
-const Item = require('../models/itemModel');
+import { BadRequestError } from '../errors/bad-request-error.js';
+import { NotFoundError } from '../errors/not-found-error.js';
 
-const itemController = {};
+import { Item } from '../models/itemModel.js';
 
-itemController.addItem = async (req, res, next) => {
-  try {
-    console.log('req.body', req.body);
-    const { item_name, item_description, item_status, item_cost, item_photo } =
-      req.body;
-    const createdItem = await Item.create({
-      item_name,
-      item_description,
-      item_status,
-      item_cost,
-      item_photo,
-    });
-    res.locals.item = createdItem;
-    return next();
-  } catch (err) {
-    next(console.log('you have an error: ', err));
+export const addItem = async (req, res) => {
+  const { item_name, item_description, item_status, item_cost, item_photo } =
+    req.body;
+  const createdItem = await Item.create({
+    item_name,
+    item_description,
+    item_status,
+    item_cost,
+    item_photo,
+  });
+  if (!createdItem) {
+    throw new BadRequestError('Invalid inputs');
   }
+  res.status(201).send(createdItem);
 };
 
-itemController.getItems = async (req, res, next) => {
-  try {
-    const all = await Item.find();
-    res.locals.allItems = all;
-    return next();
-  } catch (error) {
-    return next('you have an error: ', error);
+export const getItems = async (req, res) => {
+  console.log('inside getItems now');
+  const allItems = await Item.find();
+  if (!allItems) {
+    throw new NotFoundError('Items not found');
   }
+  res.status(201).send(allItems);
 };
 
-itemController.updateItem = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const { item_name, item_description, item_status, item_cost, item_photo } =
-      req.body;
-    const itemToUpdate = await Item.findOneAndUpdate(
-      { _id: id },
-      {
-        item_name: item_name,
-        item_cost: item_cost,
-        item_status: item_status,
-        item_description: item_description,
-        item_photo: item_photo,
-      },
-      { new: true }
-    );
-    res.locals.changedItem = itemToUpdate;
-    return next();
-  } catch (err) {
-    return next('err: ', err);
+export const updateItem = async (req, res) => {
+  const { id } = req.params;
+  const { item_name, item_description, item_status, item_cost, item_photo } =
+    req.body;
+  const itemToUpdate = await Item.findOneAndUpdate(
+    { _id: id },
+    {
+      item_name: item_name,
+      item_cost: item_cost,
+      item_status: item_status,
+      item_description: item_description,
+      item_photo: item_photo,
+    },
+    { new: true }
+  );
+  console.log('hi there');
+  console.log(itemToUpdate);
+
+  if (!itemToUpdate) {
+    throw new BadRequestError('Item not updated');
   }
+  res.status(201).send(itemToUpdate);
 };
 
-itemController.deleteItem = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const itemToDelete = await Item.findOneAndDelete({ _id: id });
-    res.locals.deletedItem = itemToDelete;
-    return next();
-  } catch (err) {
-    return next('err: ', err);
+export const deleteItem = async (req, res) => {
+  const { id } = req.params;
+  const itemToDelete = await Item.findOneAndDelete({ _id: id });
+  if (!itemToDelete) {
+    throw new BadRequestError('Item unable to be deleted');
   }
+  res.status(201).send(itemToDelete);
 };
-
-
-module.exports = itemController;

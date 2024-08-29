@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+
 const Schema = mongoose.Schema;
 
 const itemSchema = new Schema({
@@ -9,4 +10,5 @@ const itemSchema = new Schema({
   item_photo: { type: String, required: false }, //URL link to the image
 });
 
-module.exports = mongoose.model('Item', itemSchema);
+const Item = mongoose.model('Item', itemSchema);
+export { Item };
