@@ -1,5 +1,12 @@
 import React from 'react';
 import '../assets/styles.scss';
+import Sold from '../components/Sold.jsx';
+
+const sold = (status) => {
+  if (status === true) {
+    return <Sold />;
+  }
+};
 
 const Item = ({ item, deleteItem, updateItem }) => {
   if (!item) return null;
@@ -9,14 +16,14 @@ const Item = ({ item, deleteItem, updateItem }) => {
       <img src={item.item_photo} />
       <div>{item.item_description}</div>
       <div>{item.item_cost}</div>
-      <div>{item.item_status}</div>
+      <div>{sold(item.item_status)}</div>
       <button
         className='button'
         onClick={() => {
           deleteItem(item._id);
         }}
       >
-        Delete Item
+        X
       </button>
       <button
         className='button'
@@ -24,7 +31,7 @@ const Item = ({ item, deleteItem, updateItem }) => {
           updateItem(item._id);
         }}
       >
-        Update Item
+        Edit Item
       </button>
     </div>
   );

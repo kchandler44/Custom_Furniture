@@ -7,8 +7,8 @@ const Gallery = () => {
   const [item, setItem] = useState([]);
   const [itemName, setItemName] = useState('');
   const [itemDescription, setItemDescription] = useState('');
-  //will make it so this is a dropdown with available/sold options
-  const [itemStatus, setItemStatus] = useState('');
+  // default set to "available/true". checkbox will show "Sold"
+  const [itemIsSold, setItemIsSold] = useState(false);
   //will change from 0 so items don't accidentally get posted for $0
   const [itemCost, setItemCost] = useState('');
   const [itemPhoto, setItemPhoto] = useState('');
@@ -23,20 +23,22 @@ const Gallery = () => {
     const result = fetchData().catch(console.error);
   }, []);
 
+  const changeItemStatus = (checked) => {
+    setItemIsSold(checked);
+  };
   const addItem = async () => {
     if (
       itemName !== '' &&
       itemDescription !== '' &&
       itemPhoto !== '' &&
-      itemCost !== '' &&
-      itemStatus !== ''
+      itemCost !== ''
     ) {
       const newItem = {
         item_name: itemName,
         item_description: itemDescription,
         item_photo: itemPhoto,
         item_cost: itemCost,
-        item_status: itemStatus,
+        item_status: itemIsSold,
       };
       const response = await fetch('http://localhost:3000/api/item/addItem', {
         method: 'POST',
@@ -54,7 +56,7 @@ const Gallery = () => {
         setItemCost('');
         setItemPhoto('');
         setItemDescription('');
-        setItemStatus('');
+        setItemIsSold(false);
       } else {
         console.log('Failed to add task due to missing information');
       }
@@ -63,7 +65,6 @@ const Gallery = () => {
 
   const deleteItem = async (itemId) => {
     try {
-      console.log('itemId: ', itemId);
       const response = await fetch(
         `http://localhost:3000/api/item/deleteItem/${itemId}`,
         {
@@ -85,15 +86,14 @@ const Gallery = () => {
       itemName !== '' ||
       itemDescription !== '' ||
       itemPhoto !== '' ||
-      itemCost !== '' ||
-      itemStatus !== ''
+      itemCost !== ''
     ) {
       const updatedItem = {
         item_name: itemName,
         item_description: itemDescription,
         item_photo: itemPhoto,
         item_cost: itemCost,
-        item_status: itemStatus,
+        item_status: itemIsSold,
       };
       try {
         const response = await fetch(
@@ -118,7 +118,6 @@ const Gallery = () => {
           setItemCost('');
           setItemPhoto('');
           setItemDescription('');
-          setItemStatus('');
           console.log('Item successfully updated');
         } else {
           console.log('Failed to update item');
@@ -182,12 +181,12 @@ const Gallery = () => {
           ></input>
         </div>
         <div>
-          Status
+          Sold
           <input
             className='detailInput'
-            type='text'
-            value={itemStatus}
-            onChange={(e) => setItemStatus(e.target.value)}
+            type='checkbox'
+            checked={itemIsSold}
+            onChange={(e) => changeItemStatus(e.target.checked)}
           ></input>
         </div>
         <div>
