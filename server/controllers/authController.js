@@ -3,6 +3,7 @@ import { User } from '../models/usersModel.js';
 import { attachCookie } from '../util/attachCookie.js';
 
 export const login = async (req, res) => {
+    console.log('are we here?');
   const { username, password } = req.body;
   console.log(username, password);
   // validate username and password - they exist

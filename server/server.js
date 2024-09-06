@@ -46,7 +46,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'));
 });
 
-app.use('login/api/auth', authRouter);
+app.use('/api/auth', authRouter);
 app.use('/api/items', itemRouter);
 
 app.use('*', (req, res) => {
