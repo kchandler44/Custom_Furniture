@@ -1,13 +1,21 @@
 import React from 'react';
 import '../assets/styles.scss';
-import Gallery from '../components/Gallery.jsx'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from '../pages/Login.jsx';
+import Home from '../pages/Home.jsx';
+import Manage from '../pages/Manage.jsx';
 
 const App = () => {
   return (
-    <div>
-      <h1 id='title'>Aamold Custom Designs</h1>
-      <Gallery />
-    </div>
+    <BrowserRouter>
+      <div className='container'>
+        <Routes>
+          <Route path='/home' element={<Home />} />
+          <Route path='/manage' element={<Manage />} />
+          <Route path='/login' element={<Login />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 };
 

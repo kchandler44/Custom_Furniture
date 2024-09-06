@@ -39,14 +39,11 @@ app.use(
   })
 );
 
-//only authorized users (Chris) will be able to access these pages
-app.use('/api/item', itemRouter);
-
+app.use(express.static(path.join(__dirname, '../build')));
 // serve index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../index.html'));
+  res.sendFile(path.join(__dirname, '../build/index.html'));
 });
-
 
 app.use('*', (req, res) => {
   throw new NotFoundError();
