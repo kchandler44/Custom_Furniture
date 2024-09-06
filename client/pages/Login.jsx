@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../assets/styles.scss';
 
 const Login = () => {
-  const [user, setUser] = useState([]);
+  const [userId, setUserId] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userId) {
+      console.log('user successfully logged in');
+      navigate(`/manage`);
+    }
+  }, [userId]);
 
   const login = async () => {
     const authUser = { username: username, password: password };
@@ -17,8 +27,7 @@ const Login = () => {
     });
     if (response.ok) {
       const responseData = await response.json();
-      setUser((previous) => [...previous, responseData]);
-      console.log('responseData: ', responseData);
+      setUserId(responseData._id);
       setUsername('');
       setPassword('');
     } else {

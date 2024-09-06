@@ -3,9 +3,7 @@ import { User } from '../models/usersModel.js';
 import { attachCookie } from '../util/attachCookie.js';
 
 export const login = async (req, res) => {
-    console.log('are we here?');
   const { username, password } = req.body;
-  console.log(username, password);
   // validate username and password - they exist
   if (!username || !password) {
     throw new BadRequestError('Must provide username and password');
@@ -13,7 +11,6 @@ export const login = async (req, res) => {
   // query database for user with given username
   const existingUser = await User.findOne({ username });
   // handle case where no user exists with that username
-  console.log('existingUser: ', existingUser);
   if (!existingUser) {
     throw new BadRequestError('Invalid credentials');
   }
@@ -52,7 +49,6 @@ export const changePassword = async (req, res) => {
   //req.params will contain userId
   //req.body will contain oldPassword, newPassword
   const { oldPassword, newPassword } = req.body;
-  console.log('oldPassword: ', oldPassword, 'newPassword: ', newPassword);
   // reconfirm that oldPassword matches existing password using comparePassword
   const passwordsMatch = await existingUser.comparePassword(oldPassword);
   if (!passwordsMatch) {
