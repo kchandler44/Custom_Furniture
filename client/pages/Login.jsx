@@ -12,7 +12,7 @@ const Login = () => {
   useEffect(() => {
     if (userId) {
       console.log('user successfully logged in');
-      navigate(`/manage`);
+      navigate('/account');
     }
   }, [userId]);
 
@@ -31,6 +31,7 @@ const Login = () => {
       setUsername('');
       setPassword('');
     } else {
+      alert('Username and/or password not recognized');
       console.log('Failed to login');
     }
   };

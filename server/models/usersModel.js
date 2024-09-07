@@ -31,14 +31,12 @@ userSchema.pre('save', async function () {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(this.password, salt);
   this.password = hashedPassword;
-  console.log('this.password: ', this.password);
 });
 
 //schema has property: 'method', custom define 'comparePassword'
 userSchema.methods.comparePassword = async function (providedPassword) {
-  //   const isMatch = await bcrypt.compare(providedPassword, this.password);
-  //   return isMatch;
-  return providedPassword === this.password;
+  const isMatch = await bcrypt.compare(providedPassword, this.password);
+  return isMatch;
 };
 
 userSchema.methods.createJwt = function () {

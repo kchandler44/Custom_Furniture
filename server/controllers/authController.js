@@ -2,6 +2,36 @@ import { BadRequestError } from '../customErrors/bad-request-error.js';
 import { User } from '../models/usersModel.js';
 import { attachCookie } from '../util/attachCookie.js';
 
+const requirements = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).+$/;
+
+export const createUser = async (req, res) => {
+  const { username, password } = req.body;
+  // validate inputs
+  if (!username || !password) {
+    throw new BadRequestError('Invalid inputs');
+  }
+  if (password.length < 8 || !requirements) {
+    throw new BadRequestError('password must meet requirements');
+  }
+  // Check to see if user with this username already exists
+  const existingUser = await User.findOne({ username });
+  if (existingUser) {
+    throw new BadRequestError('User with that username exists');
+  }
+
+  //create user document
+  const newUser = await User.create({ username, password });
+  newUser.save();
+  // createJWT defined on userSchema
+  const token = newUser.createJwt();
+  // set cookie on res obj with name 'token'
+  // attachCookie method - defined in util folder
+  attachCookie(res, token);
+  console.log(newUser, ' => newUser');
+  console.log(password, '=> password');
+  res.status(201).send(newUser);
+};
+
 export const login = async (req, res) => {
   const { username, password } = req.body;
   // validate username and password - they exist
@@ -20,7 +50,6 @@ export const login = async (req, res) => {
   if (!passwordsMatch) {
     throw new BadRequestError('Invalid credentials');
   }
-
   // if pws match, create a JWT
   // createJwt is defined on userSchema -> returns token
   const token = existingUser.createJwt();
@@ -44,26 +73,23 @@ export const logout = async (req, res) => {
 };
 
 export const changePassword = async (req, res) => {
-  const { userId } = req.params;
-  const existingUser = await User.findOne({ userId });
   //req.params will contain userId
   //req.body will contain oldPassword, newPassword
+  const { id } = req.params;
   const { oldPassword, newPassword } = req.body;
-  // reconfirm that oldPassword matches existing password using comparePassword
-  const passwordsMatch = await existingUser.comparePassword(oldPassword);
-  if (!passwordsMatch) {
-    throw new BadRequestError('Invalid credentials');
-  }
-  // if passwords do match, update the pw with restrictions
-  const restrictions = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).+$/;
-  if (newPassword.length < 8 || !restrictions) {
+  const existingUser = await User.findById(id);
+  // make sure password is long enough and meets proper requirements defined above
+  if (newPassword.length < 8 || !requirements) {
     throw new BadRequestError(
-      'Password must contain the following: at least 8 characters, at least 1 uppercase letter, and at least '
+      'Password must contain the following: at least 8 characters, at least 1 uppercase letter, and at least 1 symbol'
     );
   }
+  if (newPassword === oldPassword) {
+    throw new BadRequestError('Password cannot be reused');
+  }
   // updateOne first and then save so that it .pre is triggered from the userModel
-  const updatedPassword = await User.updateOne({ password: newPassword });
-  console.log(updatedPassword, ' is updatedPassword');
-  await existingUser.save();
-  res.status(200).send({ message: 'success' });
+  existingUser.password = newPassword;
+  existingUser.markModified('password');
+  existingUser.save();
+  res.status(200).send('password updated successfully');
 };
