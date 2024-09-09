@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import '../assets/styles.scss';
 import Item from '../components/Item.jsx';
 
+
+// BUG - unexpected token '<', "<doctype"... is not valid JSON
 const Gallery = () => {
   const [item, setItem] = useState([]);
   const [itemName, setItemName] = useState('');

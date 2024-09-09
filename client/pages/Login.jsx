@@ -77,7 +77,7 @@ const Login = () => {
           <button
             className='button'
             onClick={(e) => {
-              changePassword;
+              changePassword();
             }}
           >
             Change Password
@@ -85,7 +85,7 @@ const Login = () => {
           <button
             className='button'
             onClick={(e) => {
-              logout;
+              logout();
             }}
           >
             Log Out

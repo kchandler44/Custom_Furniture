@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const ManagePage = ({ oldPassword, userId, changePassword }) => {
   return (
     <div>
-      <h2>Login Successful</h2>
+      <h2>Change Password</h2>
       <div>
         <button
           className='button'
