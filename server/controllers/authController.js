@@ -27,8 +27,6 @@ export const createUser = async (req, res) => {
   // set cookie on res obj with name 'token'
   // attachCookie method - defined in util folder
   attachCookie(res, token);
-  console.log(newUser, ' => newUser');
-  console.log(password, '=> password');
   res.status(201).send(newUser);
 };
 
@@ -91,5 +89,5 @@ export const changePassword = async (req, res) => {
   existingUser.password = newPassword;
   existingUser.markModified('password');
   existingUser.save();
-  res.status(200).send('password updated successfully');
+  res.status(200).send({ message: 'password updated successfully' });
 };

@@ -3,11 +3,7 @@ import '../assets/styles.scss';
 import Gallery from '../components/Gallery.jsx';
 
 const Manage = () => {
-  return (
-    <div>
-      <Gallery />
-    </div>
-  );
+  return <div>GOT HERE</div>;
 };
 
 export default Manage;
