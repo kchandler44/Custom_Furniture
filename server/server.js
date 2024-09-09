@@ -10,6 +10,7 @@ import { DbConnectionError } from './customErrors/db-connection-error.js';
 import { NotFoundError } from './customErrors/not-found-error.js';
 import { CustomError } from './customErrors/custom-error.js';
 import itemRouter from './routes/itemRouter.js';
+import authRouter from './routes/authRouter.js';
 
 //used for ES6
 const __filename = fileURLToPath(import.meta.url);
@@ -39,14 +40,14 @@ app.use(
   })
 );
 
-//only authorized users (Chris) will be able to access these pages
-app.use('/api/item', itemRouter);
-
+app.use(express.static(path.join(__dirname, '../build')));
 // serve index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../index.html'));
+  res.sendFile(path.join(__dirname, '../build/index.html'));
 });
 
+app.use('/api/auth', authRouter);
+app.use('/api/items', itemRouter);
 
 app.use('*', (req, res) => {
   throw new NotFoundError();

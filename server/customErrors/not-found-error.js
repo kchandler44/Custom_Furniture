@@ -5,8 +5,6 @@ export class NotFoundError extends CustomError {
     // This message will be console logged in error handling middleware
     super('Not found error');
     this.statusCode = 404;
-
-    Object.setPrototypeOf(this, BadRequestError.prototype);
   }
 
   // Formats the error message to send back to the client
