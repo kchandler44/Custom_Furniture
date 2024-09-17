@@ -40,14 +40,16 @@ app.use(
   })
 );
 
+app.use('/api/auth', authRouter);
+app.use('/api/item', itemRouter);
+
 app.use(express.static(path.join(__dirname, '../build')));
 // serve index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'));
 });
 
-app.use('/api/auth', authRouter);
-app.use('/api/items', itemRouter);
+
 
 app.use('*', (req, res) => {
   throw new NotFoundError();

@@ -105,7 +105,7 @@ const Login = () => {
           <button
             className='button'
             onClick={(e) => {
-              navigate('/manage');
+              navigate(`/manage/:id${userId}`);
             }}
           >
             Continue
