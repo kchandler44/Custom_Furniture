@@ -1,8 +1,8 @@
 import React from 'react';
 import '../assets/styles.scss';
-import Gallery from '../components/Gallery.jsx';
+import GalleryView from '../components/GalleryView.jsx';
 const Home = () => {
-  return <Gallery />;
+  return <GalleryView />;
 };
 
 export default Home;

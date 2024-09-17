@@ -7,15 +7,10 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  // change default set to false. Changes to true when Change Password button is clicked.
+  const [change, setChange] = useState(false);
 
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (userId) {
-  //     console.log('user successfully logged in');
-  //     navigate('/manage');
-  //   }
-  // }, [userId]);
 
   const login = async () => {
     const authUser = { username: username, password: password };
@@ -33,8 +28,47 @@ const Login = () => {
       setPassword('');
     } else {
       alert('Username and/or password not recognized');
-      console.log('Failed to login');
     }
+  };
+
+  const logout = async () => {
+    const response = await fetch('http://localhost:3000/api/auth/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(response),
+    });
+    if (response.ok) {
+      setUserId('');
+      alert('logout successful');
+    }
+  };
+
+  const changePassword = async (userId) => {
+    const response = await fetch(`/api/auth/change-password/${userId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        oldPassword: password,
+        newPassword: newPassword,
+      }),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setPassword('');
+      setNewPassword('');
+      setUserId('');
+      alert('password reset successful');
+    } else {
+      alert('problem updating password');
+    }
+  };
+
+  const handleChangeClick = async () => {
+    setChange(true);
   };
 
   return (
@@ -71,17 +105,46 @@ const Login = () => {
           <button
             className='button'
             onClick={(e) => {
-              navigate('/manage');
+              navigate(`/manage/:id${userId}`);
             }}
-          >Continue</button>
+          >
+            Continue
+          </button>
           <button
             className='button'
             onClick={(e) => {
-              changePassword();
+              handleChangeClick();
             }}
           >
             Change Password
           </button>
+          <div>
+            {' '}
+            {change && (
+              <div>
+                Enter Existing Password
+                <input
+                  type='text'
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                ></input>
+                Enter New Password
+                <input
+                  type='text'
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                ></input>
+                <button
+                  className='button'
+                  onClick={(e) => {
+                    changePassword(userId);
+                  }}
+                >
+                  Update Password
+                </button>
+              </div>
+            )}
+          </div>
           <button
             className='button'
             onClick={(e) => {

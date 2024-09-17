@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import '../assets/styles.scss';
-import Item from '../components/Item.jsx';
+import Item from './Item.jsx';
 
-
-// BUG - unexpected token '<', "<doctype"... is not valid JSON
-const Gallery = () => {
+const Gallery = ({ userId }) => {
   const [item, setItem] = useState([]);
   const [itemName, setItemName] = useState('');
   const [itemDescription, setItemDescription] = useState('');
@@ -16,14 +14,22 @@ const Gallery = () => {
   const [itemPhoto, setItemPhoto] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetch('http://localhost:3000/api/item/getItems');
-      const jsonData = await data.json();
-      console.log(jsonData);
-      setItem(jsonData);
-    };
-    const result = fetchData().catch(console.error);
+    fetchItems();
   }, []);
+
+  const fetchItems = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/item/getItems');
+      if (response.ok) {
+        const responseData = await response.json();
+        setItem(responseData);
+      } else {
+        throw new Error(`Response status: , ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Fetch error: ', error.message);
+    }
+  };
 
   const changeItemStatus = (checked) => {
     setItemIsSold(checked);
@@ -53,14 +59,12 @@ const Gallery = () => {
       if (response.ok) {
         const responseData = await response.json();
         setItem((previous) => [...previous, responseData]);
-        console.log('responseData: ', responseData);
         setItemName('');
         setItemCost('');
         setItemPhoto('');
         setItemDescription('');
         setItemIsSold(false);
       } else {
-        console.log('Failed to add task due to missing information');
       }
     }
   };
@@ -111,7 +115,6 @@ const Gallery = () => {
         if (response.ok) {
           const updatedItemData = await response.json();
           setItem((prevItems) => {
-            console.log('prevItems', prevItems);
             prevItems.map((item) =>
               item._id === itemId ? updatedItemData : item
             );
@@ -120,9 +123,7 @@ const Gallery = () => {
           setItemCost('');
           setItemPhoto('');
           setItemDescription('');
-          console.log('Item successfully updated');
         } else {
-          console.log('Failed to update item');
         }
       } catch (error) {
         console.log('Error updating item:', error);
