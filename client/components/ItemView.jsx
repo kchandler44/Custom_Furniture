@@ -15,7 +15,7 @@ const ItemView = ({ item }) => {
       <h3 className='itemDetail'>{item.item_name}</h3>
       <img className='itemImage' src={item.item_photo} />
       <div className='itemDetail'>{item.item_description}</div>
-      <div className='itemDetail'>{item.item_cost}</div>
+      <div className='itemDetail'>${item.item_cost}</div>
       <div>{sold(item.item_status)}</div>
     </div>
   );
