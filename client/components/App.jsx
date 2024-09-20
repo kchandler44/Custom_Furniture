@@ -8,7 +8,7 @@ import Manage from '../pages/Manage.jsx';
 const App = () => {
   return (
     <BrowserRouter>
-      <div className='container'>
+      <div id='container'>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/manage/:userId' element={<Manage />} />

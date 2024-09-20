@@ -12,10 +12,10 @@ const ItemView = ({ item }) => {
   if (!item) return null;
   return (
     <div id='galleryItem'>
-      <h2>{item.item_name}</h2>
-      <img src={item.item_photo} />
-      <div>{item.item_description}</div>
-      <div>{item.item_cost}</div>
+      <h3 className='itemDetail'>{item.item_name}</h3>
+      <img className='itemImage' src={item.item_photo} />
+      <div className='itemDetail'>{item.item_description}</div>
+      <div className='itemDetail'>{item.item_cost}</div>
       <div>{sold(item.item_status)}</div>
     </div>
   );

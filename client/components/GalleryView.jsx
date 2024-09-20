@@ -29,7 +29,14 @@ const GalleryView = () => {
     return <ItemView item={item} key={uniqueKey} />;
   });
 
-  return <div>{viewedItems}</div>;
+  return (
+    <div>
+    <h2 className='sectionTitle'>Gallery</h2>
+    <div id='gallery'>
+      {viewedItems}
+    </div>
+    </div>
+  );
 };
 
 export default GalleryView;
